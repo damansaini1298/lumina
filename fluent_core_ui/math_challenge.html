@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Math Challenge | Lumina Learning</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb784",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#f9f9f9",
+                    "inverse-surface": "#2f3131",
+                    "tertiary-container": "#a15100",
+                    "on-background": "#1a1c1c",
+                    "on-surface-variant": "#4a4455",
+                    "on-primary-container": "#ede0ff",
+                    "primary-fixed-dim": "#d2bbff",
+                    "primary-fixed": "#eaddff",
+                    "surface-container-low": "#f3f3f3",
+                    "on-primary-fixed-variant": "#5a00c6",
+                    "surface": "#f9f9f9",
+                    "tertiary-fixed": "#ffdcc6",
+                    "inverse-primary": "#d2bbff",
+                    "surface-dim": "#dadada",
+                    "on-secondary-fixed-variant": "#474746",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-tertiary-fixed": "#301400",
+                    "outline": "#7b7487",
+                    "primary-container": "#7c3aed",
+                    "tertiary": "#7d3d00",
+                    "secondary-container": "#e2dfde",
+                    "surface-container-high": "#e8e8e8",
+                    "surface-container": "#eeeeee",
+                    "on-tertiary-fixed-variant": "#713700",
+                    "on-secondary": "#ffffff",
+                    "surface-variant": "#e2e2e2",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "on-primary-fixed": "#25005a",
+                    "on-secondary-container": "#636262",
+                    "primary": "#630ed4",
+                    "outline-variant": "#ccc3d8",
+                    "inverse-on-surface": "#f1f1f1",
+                    "secondary-fixed": "#e5e2e1",
+                    "surface-bright": "#f9f9f9",
+                    "on-tertiary-container": "#ffe0cd",
+                    "surface-tint": "#732ee4",
+                    "error": "#ba1a1a",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "secondary": "#5f5e5e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Noto Serif"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, .font-serif { font-family: 'Noto Serif', serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(249, 249, 249, 0.7); backdrop-filter: blur(24px); }
+        .primary-gradient { background: linear-gradient(135deg, #630ed4 0%, #7c3aed 100%); }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary-fixed-dim">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-12 py-6 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-xl">
+<div class="text-2xl font-serif italic font-black text-stone-900 dark:text-stone-50">Lumina</div>
+<div class="hidden md:flex items-center gap-12">
+<a class="text-violet-700 dark:text-violet-400 border-b-2 border-violet-600 pb-1 font-sans uppercase tracking-widest text-xs" href="#">Practice</a>
+<a class="text-stone-500 dark:text-stone-400 font-sans uppercase tracking-widest text-xs hover:text-violet-600 transition-colors duration-300" href="#">Progress</a>
+<a class="text-stone-500 dark:text-stone-400 font-sans uppercase tracking-widest text-xs hover:text-violet-600 transition-colors duration-300" href="#">Settings</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-stone-900 dark:text-stone-50 hover:text-violet-600 transition-colors">account_circle</button>
+</div>
+</nav>
+<main class="pt-32 pb-24 px-6 md:px-12 max-w-7xl mx-auto min-h-screen">
+<!-- Hero Section -->
+<header class="mb-16 md:flex items-end justify-between">
+<div class="max-w-2xl">
+<h1 class="text-6xl md:text-8xl font-black tracking-tight leading-tight mb-4">Math Challenge</h1>
+<p class="text-on-surface-variant text-lg md:text-xl font-body max-w-md">Precision meets performance in our curated mathematical arena. Master the art of rapid calculation.</p>
+</div>
+<div class="hidden md:flex flex-col items-end gap-2 text-right">
+<span class="text-xs font-label uppercase tracking-widest text-on-surface-variant">Active Session</span>
+<span class="text-2xl font-serif italic">Scholastic Tier</span>
+</div>
+</header>
+<!-- Main Workspace Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Sidebar Controls -->
+<aside class="lg:col-span-3 space-y-6 order-2 lg:order-1">
+<!-- Challenge Settings -->
+<div class="bg-surface-container-low p-8 rounded-xl">
+<h3 class="font-headline text-xl font-bold mb-8">Parameters</h3>
+<div class="space-y-10">
+<div>
+<label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-4">Operation</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="p-3 bg-surface-container-lowest rounded-lg border-2 border-primary text-primary font-bold text-lg">Multiplication</button>
+<button class="p-3 bg-surface-container-lowest rounded-lg text-secondary hover:bg-white transition-all text-lg">Division</button>
+<button class="p-3 bg-surface-container-lowest rounded-lg text-secondary hover:bg-white transition-all text-lg">Addition</button>
+<button class="p-3 bg-surface-container-lowest rounded-lg text-secondary hover:bg-white transition-all text-lg">Subtraction</button>
+</div>
+</div>
+<div>
+<label class="block text-xs font-label uppercase tracking-widest text-on-surface-variant mb-4">Difficulty</label>
+<div class="space-y-2">
+<button class="w-full text-left px-4 py-3 bg-white rounded-lg flex justify-between items-center group">
+<span class="font-semibold">Novice</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">check_circle</span>
+</button>
+<button class="w-full text-left px-4 py-3 bg-primary-container text-on-primary-container rounded-lg flex justify-between items-center">
+<span class="font-semibold">Scholar</span>
+<span class="material-symbols-outlined text-sm">check_circle</span>
+</button>
+<button class="w-full text-left px-4 py-3 bg-white rounded-lg flex justify-between items-center group">
+<span class="font-semibold">Master</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">check_circle</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="font-semibold">Timed Mode</span>
+<button class="w-12 h-6 bg-primary rounded-full relative flex items-center px-1">
+<div class="w-4 h-4 bg-white rounded-full translate-x-6"></div>
+</button>
+</div>
+</div>
+</div>
+<!-- Stats Panel -->
+<div class="bg-surface-container-low p-8 rounded-xl space-y-6">
+<h3 class="font-headline text-xl font-bold mb-4">Performance</h3>
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg">
+<div class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1">Current Streak</div>
+<div class="text-3xl font-serif italic font-black text-primary">12</div>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-lowest p-4 rounded-lg flex-1">
+<div class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1">Accuracy</div>
+<div class="text-2xl font-serif font-bold">94%</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg flex-1">
+<div class="text-xs font-label uppercase tracking-widest text-on-surface-variant mb-1">Avg Speed</div>
+<div class="text-2xl font-serif font-bold">1.2s</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Zen Cockpit Area -->
+<section class="lg:col-span-9 space-y-8 order-1 lg:order-2">
+<!-- Timer Bar -->
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full w-2/3 primary-gradient rounded-full"></div>
+</div>
+<!-- Main Challenge Card -->
+<div class="bg-surface-container-lowest p-12 md:p-24 rounded-xl flex flex-col items-center justify-center relative overflow-hidden group">
+<!-- Subtle decorative background text -->
+<div class="absolute inset-0 flex items-center justify-center opacity-[0.02] select-none pointer-events-none">
+<span class="text-[30rem] font-serif font-black italic">148</span>
+</div>
+<!-- Problem Display -->
+<div class="relative z-10 text-center mb-12">
+<div class="text-6xl md:text-9xl font-headline font-black italic tracking-tighter mb-4 text-on-surface">
+                            148 <span class="text-primary mx-4">×</span> 3
+                        </div>
+<div class="h-1 w-24 bg-primary mx-auto rounded-full opacity-30"></div>
+</div>
+<!-- Input Interface -->
+<div class="relative z-10 w-full max-w-md">
+<div class="relative mb-12">
+<input autofocus="" class="w-full text-center py-6 text-6xl font-serif italic border-none focus:ring-0 bg-transparent placeholder-surface-container-highest" placeholder="?" type="text"/>
+<div class="absolute bottom-0 left-0 w-full h-0.5 bg-surface-container-highest"></div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-focus-within:w-full transition-all duration-500"></div>
+</div>
+<!-- Keypad -->
+<div class="grid grid-cols-3 gap-3 md:gap-4">
+<!-- Numeric Keys -->
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">1</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">2</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">3</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">4</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">5</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">6</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">7</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">8</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">9</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">backspace</span>
+</button>
+<button class="aspect-square flex items-center justify-center bg-surface-container-low rounded-lg text-2xl font-bold hover:bg-surface-container-highest transition-colors">0</button>
+<button class="aspect-square flex items-center justify-center primary-gradient text-white rounded-lg text-2xl font-bold hover:scale-102 transition-transform shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">keyboard_return</span>
+</button>
+</div>
+</div>
+</div>
+<!-- AI Synthesizer Tip -->
+<div class="bg-surface-container-low border-l-4 border-primary p-8 rounded-xl flex items-start gap-6 group">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-lg mb-2">Synthesizer Shortcut</h4>
+<p class="text-on-surface-variant font-body">To multiply by 3 rapidly, think of it as (Value × 2) + Value. For 148 × 3: (148 × 2 = 296) then (296 + 148 = 444). Visualization reduces cognitive load.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Secondary Immersive Visuals -->
+<section class="mt-24 grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="relative h-[400px] rounded-xl overflow-hidden group">
+<img alt="Abstract geometric shapes floating in a digital void" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Abstract translucent geometric mathematical shapes floating in a minimalist digital space with soft violet lighting and deep charcoal background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3GB6d370xp1rrL5bkLmJZJtvcHVgZWp6Twp-4cGE3L3oQzYbZ5_kDuaongu55ZzLocAaNksPiIc8szUS6_g294L9bk3NOJQGtDMyfQ-VyZT8NZ5LztaPdjEjSAXPC7SI6tNGPjkvbp213Lu1-6UHuEMRfZ8jfL6U6Y7Z0z2TN0BZhiiAsckb7-qQO9z-089KDo_zJy7eTUJNni_rdcYAYXpvJItC1v1FkdBzKrSKTjv2a-2Wm8gBb0jeW7mWFUxfF0remNK8Ifrg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 to-transparent"></div>
+<div class="absolute bottom-8 left-8 text-white">
+<h3 class="text-3xl font-serif italic mb-2">Visual Logic</h3>
+<p class="text-white/70 max-w-xs">Connecting numbers to spatial intuition enhances memory retention and processing speed.</p>
+</div>
+</div>
+<div class="bg-white p-12 rounded-xl flex flex-col justify-center">
+<span class="text-xs font-label uppercase tracking-widest text-primary font-bold mb-4">Historical Context</span>
+<h3 class="text-4xl font-headline font-black mb-6">The Trachtenberg Method</h3>
+<p class="text-on-surface-variant text-lg leading-relaxed mb-8">Developed by Jakow Trachtenberg in a concentration camp, this system of mental calculation is designed for high-speed computation without the need for pen and paper.</p>
+<button class="w-fit text-primary font-bold flex items-center gap-2 group">
+<span>Explore Methodology</span>
+<span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-12 flex flex-col md:flex-row justify-between items-center border-t border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-950">
+<div class="text-lg font-serif italic text-stone-900 dark:text-stone-50 mb-6 md:mb-0">Lumina</div>
+<div class="flex gap-8 mb-6 md:mb-0">
+<a class="text-stone-400 dark:text-stone-600 hover:text-violet-500 transition-all font-sans text-sm tracking-wide" href="#">Privacy Policy</a>
+<a class="text-stone-400 dark:text-stone-600 hover:text-violet-500 transition-all font-sans text-sm tracking-wide" href="#">Terms of Service</a>
+<a class="text-stone-400 dark:text-stone-600 hover:text-violet-500 transition-all font-sans text-sm tracking-wide" href="#">Accessibility</a>
+</div>
+<div class="text-stone-900 dark:text-stone-50 font-sans text-sm tracking-wide">© 2024 Lumina Learning. All rights reserved.</div>
+</footer>
+</body></html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lumina — Learn Languages the Smart Way</title>
+    <meta name="description" content="Lumina is a distraction-free language learning platform powered by spaced-repetition science, native audio, and daily math sprints." />
+    <meta name="theme-color" content="#630ed4" />
+    <meta property="og:title" content="Lumina — Learn Languages the Smart Way" />
+    <meta property="og:description" content="Master vocabulary, sharpen your ear with dictation, and track your progress daily." />
+    <meta property="og:type" content="website" />
+    <script>
+      (function() {
+        var localTheme = localStorage.getItem('theme');
+        if (localTheme === 'dark' || (!localTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/main.tsx"></script>
+  </body>
+</html>

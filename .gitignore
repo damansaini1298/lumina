@@ -1,0 +1,51 @@
+# Internal AI tooling — do not commit
+.agent/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+platform/dist/
+platform/.vite/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Misc
+.cache/
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+.cache/
