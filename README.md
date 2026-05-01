@@ -35,7 +35,7 @@ The output is in `platform/dist/` — fully static, no server required.
 2. Go to **Settings → Pages → Source → GitHub Actions**
 3. Every push to `main` triggers an automatic build and deploy
 
-Your app will be live at: `https://<your-username>.github.io/<repo-name>/`
+Your app will be live at: `https://damansaini1298.github.io/lumina/`
 
 ## Tech Stack
 
