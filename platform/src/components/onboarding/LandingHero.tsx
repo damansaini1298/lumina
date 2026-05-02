@@ -156,7 +156,7 @@ export default function LandingHero({ onGetStarted }: Props) {
             </button>
 
             <p className="font-label text-xs text-white/25 tracking-wide">
-              No account required · Works offline · 3,000 words per language
+              No account required
             </p>
           </div>
 
