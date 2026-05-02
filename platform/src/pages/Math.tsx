@@ -6,12 +6,28 @@ import { useTranslate } from '../utils/i18n';
 
 type Operation = '+' | '-' | '*' | '/';
 
-function generateChallenge(activeOps: Operation[], minLimitRaw: number | '', maxLimitRaw: number | '') {
+const OPERATOR_WORDS: Record<string, Record<Operation, string>> = {
+  'en': { '+': 'plus', '-': 'minus', '*': 'times', '/': 'divided by' },
+  'fr': { '+': 'plus', '-': 'moins', '*': 'fois', '/': 'divisé par' },
+  'de': { '+': 'plus', '-': 'minus', '*': 'mal', '/': 'geteilt durch' },
+  'es': { '+': 'más', '-': 'menos', '*': 'por', '/': 'entre' },
+  'it': { '+': 'più', '-': 'meno', '*': 'per', '/': 'diviso' },
+  'pt': { '+': 'mais', '-': 'menos', '*': 'vezes', '/': 'dividido por' },
+  'ru': { '+': 'плюс', '-': 'минус', '*': 'умножить на', '/': 'разделить на' },
+  'hi': { '+': 'प्लस', '-': 'माइनस', '*': 'गुणा', '/': 'भाग' },
+  'ja': { '+': 'たす', '-': 'ひく', '*': 'かける', '/': 'わる' },
+  'zh': { '+': '加', '-': '减', '*': '乘以', '/': '除以' },
+};
+
+function generateChallenge(activeOps: Operation[], minLimitRaw: number | '', maxLimitRaw: number | '', learningLang: string) {
   const minLimit = minLimitRaw === '' ? 1 : minLimitRaw;
   const maxLimit = maxLimitRaw === '' ? 10 : maxLimitRaw;
   const ops = activeOps.length > 0 ? activeOps : ['+'];
   const op = ops[Math.floor(Math.random() * ops.length)];
   let a, b, answer, visualEquation, speakText;
+
+  const langCode = learningLang.split('-')[0].toLowerCase();
+  const opWords = OPERATOR_WORDS[langCode] || OPERATOR_WORDS['en'];
 
   const min = Math.min(minLimit, maxLimit);
   const max = Math.max(minLimit, maxLimit);
@@ -22,31 +38,31 @@ function generateChallenge(activeOps: Operation[], minLimitRaw: number | '', max
       b = Math.floor(Math.random() * (max - min + 1)) + min;
       answer = a + b;
       visualEquation = `${a} + ${b}`;
-      speakText = `${a} + ${b}`;
+      speakText = `${a} ${opWords['+']} ${b}`;
       break;
     case '-':
       a = Math.floor(Math.random() * (max - min + 1)) + min + 10;
       b = Math.floor(Math.random() * (a - min + 1)) + min;
       answer = a - b;
       visualEquation = `${a} - ${b}`;
-      speakText = `${a} - ${b}`;
+      speakText = `${a} ${opWords['-']} ${b}`;
       break;
     case '*':
       a = Math.floor(Math.random() * (Math.min(max, 15) - Math.min(min, 2) + 1)) + Math.min(min, 2);
       b = Math.floor(Math.random() * (Math.min(max, 15) - Math.min(min, 2) + 1)) + Math.min(min, 2);
       answer = a * b;
       visualEquation = `${a} × ${b}`;
-      speakText = `${a} * ${b}`;
+      speakText = `${a} ${opWords['*']} ${b}`;
       break;
     case '/':
       b = Math.floor(Math.random() * (Math.min(max, 15) - Math.min(min, 2) + 1)) + Math.min(min, 2);
       answer = Math.floor(Math.random() * (max - min + 1)) + min;
       a = answer * b;
       visualEquation = `${a} ÷ ${b}`;
-      speakText = `${a} / ${b}`;
+      speakText = `${a} ${opWords['/']} ${b}`;
       break;
     default:
-      a = 1; b = 1; answer = 2; visualEquation = '1+1'; speakText = '1 + 1';
+      a = 1; b = 1; answer = 2; visualEquation = '1+1'; speakText = `1 ${opWords['+']} 1`;
   }
 
   return { equation: visualEquation, answer: String(answer), speakText };
@@ -61,7 +77,7 @@ export default function MathBlock() {
   const [maxLimit, setMaxLimit] = useState<number | ''>(10);
 
   const [sessionStreak, setSessionStreak] = useState(0);
-  const [currentQ, setCurrentQ] = useState(() => generateChallenge(activeOps, minLimit, maxLimit));
+  const [currentQ, setCurrentQ] = useState(() => generateChallenge(activeOps, minLimit, maxLimit, learningLang));
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState<null | 'correct' | 'incorrect'>(null);
   const [isRevealed, setIsRevealed] = useState(false);
@@ -70,7 +86,7 @@ export default function MathBlock() {
 
 
   useEffect(() => {
-    setCurrentQ(generateChallenge(activeOps, minLimit, maxLimit));
+    setCurrentQ(generateChallenge(activeOps, minLimit, maxLimit, learningLang));
     setSessionStreak(0);
     setUserAnswer('');
     setIsRevealed(false);
@@ -106,7 +122,7 @@ export default function MathBlock() {
     if (isRevealed && !attempt) {
       setUserAnswer('');
       setIsRevealed(false);
-      setCurrentQ(generateChallenge(activeOps, minLimit, maxLimit));
+      setCurrentQ(generateChallenge(activeOps, minLimit, maxLimit, learningLang));
       return;
     }
 
@@ -119,7 +135,7 @@ export default function MathBlock() {
           setFeedback(null);
           setUserAnswer('');
           setSessionStreak(s => s + 1);
-          setCurrentQ(generateChallenge(activeOps, minLimit, maxLimit));
+          setCurrentQ(generateChallenge(activeOps, minLimit, maxLimit, learningLang));
         }, 800);
       });
     } else {
@@ -129,7 +145,7 @@ export default function MathBlock() {
   };
 
   const nextQuestion = () => {
-    setCurrentQ(generateChallenge(activeOps, minLimit, maxLimit));
+    setCurrentQ(generateChallenge(activeOps, minLimit, maxLimit, learningLang));
     setUserAnswer('');
     setFeedback(null);
   };
