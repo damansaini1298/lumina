@@ -1,0 +1,52 @@
+# Internal AI tooling — do not commit
+.agent/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+platform/dist/
+platform/.vite/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Misc
+.cache/
+
+# Large data / generation files — not needed for the app
+translation_cache.json
+translation_matrix_live.json
+german output.txt
+top_3000_german_words.txt
+generate_vocab.js
+DESIGN.md
+scripts/
+old_home.tsx
+initial_home.tsx
