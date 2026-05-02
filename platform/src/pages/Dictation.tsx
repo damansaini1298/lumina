@@ -141,11 +141,16 @@ export default function Dictation() {
     const u = norm(userAnswer);
     const c = norm(currentQ.term);
     const tr = norm(currentQ.translation);
+    const rom = currentQ.romanization ? norm(currentQ.romanization) : '';
 
     let result: 'correct' | 'incorrect' | 'missing_accents' = 'incorrect';
 
     // Exact match on term or translation
     if (u === c || u === tr) {
+      result = 'correct';
+    }
+    // Match on romanization (e.g. "mem" for "में", "ka" for "का")
+    else if (rom && u === rom) {
       result = 'correct';
     }
     // For non-Latin scripts: accept the English translation as correct
@@ -156,6 +161,10 @@ export default function Dictation() {
     // Accent-stripped match — for French "a" matches "à", etc.
     // Treat as correct (not just "missing_accents") for a friendlier UX
     else if (stripAcc(u) === stripAcc(c) || stripAcc(u) === stripAcc(tr)) {
+      result = 'correct';
+    }
+    // Accent-stripped romanization match
+    else if (rom && stripAcc(u) === stripAcc(rom)) {
       result = 'correct';
     }
 
@@ -320,13 +329,13 @@ export default function Dictation() {
                     feedback === 'missing_accents' ? 'border-amber-500 bg-amber-500/5 text-amber-600' :
                     'border-outline-variant/50 dark:border-white/10 focus:border-primary focus:bg-white focus:dark:bg-white/10'
                   }`}
-                  placeholder={isNonLatin ? t('Type the English meaning...') : t('Type what you hear...')}
+                  placeholder={isNonLatin ? t('Type English or romanization...') : t('Type what you hear...')}
                   readOnly={feedback === 'correct'}
                 />
                 {isNonLatin && !feedback && (
                   <div className="absolute -bottom-6 left-0 right-0 text-center">
                     <span className="text-[10px] text-on-surface-variant font-medium opacity-70">
-                      💡 Type the English translation — no need for {learningLang.split('-')[0] === 'hi' ? 'Devanagari' : learningLang.split('-')[0] === 'zh' ? 'Chinese characters' : learningLang.split('-')[0] === 'ja' ? 'Japanese characters' : 'Cyrillic'}
+                      💡 Type the English meaning or romanization (e.g. "ka" for "का")
                     </span>
                   </div>
                 )}
