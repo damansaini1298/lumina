@@ -12,30 +12,7 @@ A distraction-free language learning platform powered by spaced-repetition scien
 - 📱 **Mobile-first** — Responsive with bottom tab bar on mobile, sidebar on desktop
 - 🌐 **Localized UI** — Interface switches to your native language
 
-## Getting Started
-
-```bash
-cd platform
-npm install
-npm run dev
-```
-
-## Build for Production
-
-```bash
-cd platform
-npm run build
-```
-
-The output is in `platform/dist/` — fully static, no server required.
-
-## Deploy to GitHub Pages
-
-1. Push this repo to GitHub
-2. Go to **Settings → Pages → Source → GitHub Actions**
-3. Every push to `main` triggers an automatic build and deploy
-
-Your app will be live at: `https://damansaini1298.github.io/lumina/`
+Live app at: `https://damansaini1298.github.io/lumina/`
 
 ## Tech Stack
 

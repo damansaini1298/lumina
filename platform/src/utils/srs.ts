@@ -115,6 +115,7 @@ export function sm2Update(
 export interface SRSPhrase {
   term: string;
   translation: string;
+  romanization?: string;
 }
 
 /**
