@@ -226,7 +226,7 @@ export default function MathBlock() {
                 onBlur={() => {
                   const currentMin = minLimit === '' ? 1 : minLimit;
                   const currentMax = maxLimit === '' ? 10 : maxLimit;
-                  setCurrentQ(generateChallenge(activeOps, currentMin, currentMax));
+                  setCurrentQ(generateChallenge(activeOps, currentMin, currentMax, learningLang));
                   setUserAnswer('');
                   setFeedback(null);
                   setSessionStreak(0);
@@ -244,7 +244,7 @@ export default function MathBlock() {
                 onBlur={() => {
                   const currentMin = minLimit === '' ? 1 : minLimit;
                   const currentMax = maxLimit === '' ? 10 : maxLimit;
-                  setCurrentQ(generateChallenge(activeOps, currentMin, currentMax));
+                  setCurrentQ(generateChallenge(activeOps, currentMin, currentMax, learningLang));
                   setUserAnswer('');
                   setFeedback(null);
                   setSessionStreak(0);
