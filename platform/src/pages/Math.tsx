@@ -14,10 +14,30 @@ const OPERATOR_WORDS: Record<string, Record<Operation, string>> = {
   'it': { '+': 'più', '-': 'meno', '*': 'per', '/': 'diviso' },
   'pt': { '+': 'mais', '-': 'menos', '*': 'vezes', '/': 'dividido por' },
   'ru': { '+': 'плюс', '-': 'минус', '*': 'умножить на', '/': 'разделить на' },
-  'hi': { '+': 'प्लस', '-': 'माइनस', '*': 'गुणा', '/': 'भाग' },
+  'hi': { '+': 'जमा', '-': 'घटा', '*': 'गुना', '/': 'भाग' },
   'ja': { '+': 'たす', '-': 'ひく', '*': 'かける', '/': 'わる' },
-  'zh': { '+': '加', '-': '减', '*': '乘以', '/': '除以' },
+  'zh': { '+': '加', '-': '减', '*': '乘', '/': '除以' },
 };
+
+// Maps for converting Arabic digits → native script digits
+const DEVANAGARI_DIGITS = ['०','१','२','३','४','५','६','७','८','९'];
+const CJK_DIGITS = ['零','一','二','三','四','五','六','七','八','九'];
+
+/** Convert a number to native-script digits for TTS so the engine stays in the target language */
+function toNativeDigits(n: number, langCode: string): string {
+  const s = String(n);
+  switch (langCode) {
+    case 'hi':
+      return s.split('').map(c => /\d/.test(c) ? DEVANAGARI_DIGITS[parseInt(c)] : c).join('');
+    case 'zh':
+    case 'ja':
+      // For single/double digits use Kanji; for larger numbers Arabic is fine (TTS handles it)
+      if (n <= 10) return CJK_DIGITS[n] ?? s;
+      return s; // TTS handles multi-digit Arabic with Chinese/Japanese context words
+    default:
+      return s; // Latin-script languages read Arabic digits natively
+  }
+}
 
 function generateChallenge(activeOps: Operation[], minLimitRaw: number | '', maxLimitRaw: number | '', learningLang: string) {
   const minLimit = minLimitRaw === '' ? 1 : minLimitRaw;
@@ -28,6 +48,7 @@ function generateChallenge(activeOps: Operation[], minLimitRaw: number | '', max
 
   const langCode = learningLang.split('-')[0].toLowerCase();
   const opWords = OPERATOR_WORDS[langCode] || OPERATOR_WORDS['en'];
+  const nd = (n: number) => toNativeDigits(n, langCode);
 
   const min = Math.min(minLimit, maxLimit);
   const max = Math.max(minLimit, maxLimit);
@@ -38,31 +59,31 @@ function generateChallenge(activeOps: Operation[], minLimitRaw: number | '', max
       b = Math.floor(Math.random() * (max - min + 1)) + min;
       answer = a + b;
       visualEquation = `${a} + ${b}`;
-      speakText = `${a} ${opWords['+']} ${b}`;
+      speakText = `${nd(a)} ${opWords['+']} ${nd(b)}`;
       break;
     case '-':
       a = Math.floor(Math.random() * (max - min + 1)) + min + 10;
       b = Math.floor(Math.random() * (a - min + 1)) + min;
       answer = a - b;
       visualEquation = `${a} - ${b}`;
-      speakText = `${a} ${opWords['-']} ${b}`;
+      speakText = `${nd(a)} ${opWords['-']} ${nd(b)}`;
       break;
     case '*':
       a = Math.floor(Math.random() * (Math.min(max, 15) - Math.min(min, 2) + 1)) + Math.min(min, 2);
       b = Math.floor(Math.random() * (Math.min(max, 15) - Math.min(min, 2) + 1)) + Math.min(min, 2);
       answer = a * b;
       visualEquation = `${a} × ${b}`;
-      speakText = `${a} ${opWords['*']} ${b}`;
+      speakText = `${nd(a)} ${opWords['*']} ${nd(b)}`;
       break;
     case '/':
       b = Math.floor(Math.random() * (Math.min(max, 15) - Math.min(min, 2) + 1)) + Math.min(min, 2);
       answer = Math.floor(Math.random() * (max - min + 1)) + min;
       a = answer * b;
       visualEquation = `${a} ÷ ${b}`;
-      speakText = `${a} ${opWords['/']} ${b}`;
+      speakText = `${nd(a)} ${opWords['/']} ${nd(b)}`;
       break;
     default:
-      a = 1; b = 1; answer = 2; visualEquation = '1+1'; speakText = `1 ${opWords['+']} 1`;
+      a = 1; b = 1; answer = 2; visualEquation = '1+1'; speakText = `${nd(1)} ${opWords['+']} ${nd(1)}`;
   }
 
   return { equation: visualEquation, answer: String(answer), speakText };
