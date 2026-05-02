@@ -62,11 +62,11 @@ export default {
         "full": "9999px"
       },
       "fontFamily": {
-        "headline": ["Noto Serif"],
-        "body": ["DM Sans"],
-        "label": ["DM Sans"],
-        "serif": ["Noto Serif"],
-        "sans": ["DM Sans"]
+        "headline": ["Outfit", "sans-serif"],
+        "body": ["Inter", "sans-serif"],
+        "label": ["Inter", "sans-serif"],
+        "serif": ["Outfit", "sans-serif"],
+        "sans": ["Inter", "sans-serif"]
       },
       boxShadow: {
         'premium': '0 20px 40px rgba(0, 0, 0, 0.08), 0 10px 20px rgba(0, 0, 0, 0.04)',

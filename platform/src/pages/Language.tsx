@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { LANGUAGE_DATA } from '../data/languages';
 import { playNaturalAudio } from '../utils/speech';
 import { SUPPORTED_LANGUAGES } from '../components/onboarding/LanguageModal';
 import TutorialOverlay from '../components/onboarding/TutorialOverlay';
 import { useTranslate } from '../utils/i18n';
 
 export default function Language() {
-  const { learningLang, addCoins, activeLang } = useAppContext();
+  const { learningLang, interfaceLang, addCoins, activeLang } = useAppContext();
   const t = useTranslate(activeLang);
-  const QUESTIONS = LANGUAGE_DATA[learningLang] || LANGUAGE_DATA['en-US'];
   const langName = SUPPORTED_LANGUAGES.find(l => l.code === learningLang)?.name ?? 'English';
 
+  const [QUESTIONS, setQuestions] = useState<any[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
   const [score, setScore]     = useState(0);
@@ -19,8 +18,22 @@ export default function Language() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
 
-  const currentQ = QUESTIONS[currentIdx % QUESTIONS.length];
-  const progress = (currentIdx % QUESTIONS.length) / QUESTIONS.length;
+  useEffect(() => {
+    const langCode = learningLang.split('-')[0];
+    import(`../data/dictation/dict_${langCode}.json`).then((module) => {
+      setQuestions(module.default);
+    }).catch(() => setQuestions([]));
+  }, [learningLang]);
+
+  const nativeCode = interfaceLang.split('-')[0];
+  const currentQData = QUESTIONS[currentIdx % Math.max(QUESTIONS.length, 1)];
+  const currentQ = currentQData ? {
+    term: currentQData.term,
+    translation: currentQData.translations?.[nativeCode] || currentQData.translations?.['en'] || '',
+    romanization: currentQData.romanization,
+    type: currentQData.type
+  } : undefined;
+  const progress = QUESTIONS.length > 0 ? (currentIdx % QUESTIONS.length) / QUESTIONS.length : 0;
 
   const handleReveal = () => setShowAnswer(true);
 

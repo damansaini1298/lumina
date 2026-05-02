@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { LANGUAGE_DATA } from '../data/languages';
+
 import { playNaturalAudio } from '../utils/speech';
 import { useTranslate } from '../utils/i18n';
 import TutorialOverlay from '../components/onboarding/TutorialOverlay';
@@ -32,17 +32,14 @@ export default function Dictation() {
           const translation = item.translations[targetLang] || item.translations['en'] || Object.values(item.translations)[0];
           return {
             term: item.term,
-            translation: translation
+            translation: translation,
+            romanization: item.romanization
           };
         });
         setDynamicPhrases(phrases);
       } catch (err) {
         console.warn(`Could not load dynamic dictation data for ${langCode}, falling back to static data.`, err);
-        const fallback = (LANGUAGE_DATA[learningLang] || LANGUAGE_DATA['en-US']).map(p => ({
-          term: p.term,
-          translation: p.translation,
-        }));
-        setDynamicPhrases(fallback);
+        setDynamicPhrases([]);
       } finally {
         setIsLoading(false);
       }
@@ -120,6 +117,10 @@ export default function Dictation() {
     setQueueIdx(i => i + 1);
   }, []);
 
+  // Languages that use non-Latin scripts — accept English translation as valid answer
+  const NON_LATIN_LANGS = ['hi', 'zh', 'ja', 'ru'];
+  const isNonLatin = NON_LATIN_LANGS.includes(learningLang.split('-')[0].toLowerCase());
+
   const handleCheck = (e: React.FormEvent) => {
     e.preventDefault();
     if (!userAnswer.trim() && !isRevealed) return;
@@ -132,15 +133,31 @@ export default function Dictation() {
       return;
     }
 
+    // Normalize: strip punctuation, collapse whitespace, lowercase
     const norm = (s: string) => s.replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').toLowerCase().trim();
+    // Strip all diacritical marks (accents) for lenient comparison
     const stripAcc = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
     const u = norm(userAnswer);
     const c = norm(currentQ.term);
     const tr = norm(currentQ.translation);
 
     let result: 'correct' | 'incorrect' | 'missing_accents' = 'incorrect';
-    if (u === c || u === tr) result = 'correct';
-    else if (stripAcc(u) === stripAcc(c) || stripAcc(u) === stripAcc(tr)) result = 'missing_accents';
+
+    // Exact match on term or translation
+    if (u === c || u === tr) {
+      result = 'correct';
+    }
+    // For non-Latin scripts: accept the English translation as correct
+    // This lets users type "of" for "का" (Hindi), "no" for "の" (Japanese), etc.
+    else if (isNonLatin && u === norm(currentQ.translation)) {
+      result = 'correct';
+    }
+    // Accent-stripped match — for French "a" matches "à", etc.
+    // Treat as correct (not just "missing_accents") for a friendlier UX
+    else if (stripAcc(u) === stripAcc(c) || stripAcc(u) === stripAcc(tr)) {
+      result = 'correct';
+    }
 
     // ── SM-2 quality inference ──────────────────────────────────────
     const q = inferQuality(userAnswer, currentQ.term);
@@ -283,8 +300,10 @@ export default function Dictation() {
                   <span className="font-label text-xs font-bold tracking-widest uppercase">{t('Tap to Reveal')}</span>
                 </div>
               ) : (
-                <div className="font-serif text-xl md:text-2xl font-bold text-primary dark:text-inverse-primary animate-in fade-in zoom-in-95 mb-6 text-center drop-shadow-sm">
-                  {currentQ.term} <span className="text-on-surface-variant font-medium ml-2 text-base md:text-lg">({currentQ.translation})</span>
+                <div className="font-serif text-xl md:text-2xl font-bold text-primary dark:text-inverse-primary animate-in fade-in zoom-in-95 mb-6 text-center drop-shadow-sm flex flex-wrap items-center justify-center gap-2">
+                  <span>{currentQ.term}</span>
+                  {currentQ.romanization && <span className="text-secondary font-medium font-body italic">({currentQ.romanization})</span>}
+                  <span className="text-on-surface-variant font-medium font-body">({currentQ.translation})</span>
                 </div>
               )}
 
@@ -301,9 +320,16 @@ export default function Dictation() {
                     feedback === 'missing_accents' ? 'border-amber-500 bg-amber-500/5 text-amber-600' :
                     'border-outline-variant/50 dark:border-white/10 focus:border-primary focus:bg-white focus:dark:bg-white/10'
                   }`}
-                  placeholder={t('Type what you hear...')}
+                  placeholder={isNonLatin ? t('Type the English meaning...') : t('Type what you hear...')}
                   readOnly={feedback === 'correct'}
                 />
+                {isNonLatin && !feedback && (
+                  <div className="absolute -bottom-6 left-0 right-0 text-center">
+                    <span className="text-[10px] text-on-surface-variant font-medium opacity-70">
+                      💡 Type the English translation — no need for {learningLang.split('-')[0] === 'hi' ? 'Devanagari' : learningLang.split('-')[0] === 'zh' ? 'Chinese characters' : learningLang.split('-')[0] === 'ja' ? 'Japanese characters' : 'Cyrillic'}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Feedback Message */}
