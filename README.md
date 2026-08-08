@@ -12,7 +12,7 @@ A distraction-free language learning platform powered by spaced-repetition scien
 - 📱 **Mobile-first** — Responsive with bottom tab bar on mobile, sidebar on desktop
 - 🌐 **Localized UI** — Interface switches to your native language
 
-Live app at: `https://damansaini1298.github.io/lumina/`
+Live app at: https://damansaini1298.github.io/lumina/
 
 ## Tech Stack
 
