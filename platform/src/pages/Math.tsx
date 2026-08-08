@@ -20,8 +20,8 @@ const OPERATOR_WORDS: Record<string, Record<Operation, string>> = {
 };
 
 // Maps for converting Arabic digits → native script digits
-const DEVANAGARI_DIGITS = ['०','१','२','३','४','५','६','७','८','९'];
-const CJK_DIGITS = ['零','一','二','三','四','五','六','七','八','九'];
+const DEVANAGARI_DIGITS = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+const CJK_DIGITS = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
 
 /** Convert a number to native-script digits for TTS so the engine stays in the target language */
 function toNativeDigits(n: number, langCode: string): string {
@@ -238,14 +238,11 @@ export default function MathBlock() {
           <div className="sm:flex-1 grid grid-cols-2 gap-3 glass-panel p-3 rounded-3xl">
             <div className="flex flex-col gap-1">
               <span className="text-[10px] font-bold text-on-surface-variant opacity-80 uppercase tracking-widest px-2">{t('Min')}</span>
-              <input type="number" value={minLimit} 
+              <input type="number" value={minLimit}
                 onChange={e => {
-                  const val = e.target.value;
-                  if (val === '') setMinLimit('');
-                  else setMinLimit(Math.max(1, parseInt(val)));
-                }}
-                onBlur={() => {
-                  const currentMin = minLimit === '' ? 1 : minLimit;
+                  const val = e.target.value === '' ? '' : Math.max(1, parseInt(e.target.value) || 1);
+                  setMinLimit(val);
+                  const currentMin = val === '' ? 1 : val;
                   const currentMax = maxLimit === '' ? 10 : maxLimit;
                   setCurrentQ(generateChallenge(activeOps, currentMin, currentMax, learningLang));
                   setUserAnswer('');
@@ -256,15 +253,12 @@ export default function MathBlock() {
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-[10px] font-bold text-on-surface-variant opacity-80 uppercase tracking-widest px-2">{t('Max')}</span>
-              <input type="number" value={maxLimit} 
+              <input type="number" value={maxLimit}
                 onChange={e => {
-                  const val = e.target.value;
-                  if (val === '') setMaxLimit('');
-                  else setMaxLimit(Math.min(10000, Math.max(1, parseInt(val))));
-                }}
-                onBlur={() => {
+                  const val = e.target.value === '' ? '' : Math.min(10000, Math.max(1, parseInt(e.target.value) || 1));
+                  setMaxLimit(val);
                   const currentMin = minLimit === '' ? 1 : minLimit;
-                  const currentMax = maxLimit === '' ? 10 : maxLimit;
+                  const currentMax = val === '' ? 10 : val;
                   setCurrentQ(generateChallenge(activeOps, currentMin, currentMax, learningLang));
                   setUserAnswer('');
                   setFeedback(null);
@@ -314,7 +308,14 @@ export default function MathBlock() {
                   type="number"
                   value={userAnswer}
                   onFocus={handleInputFocus}
-                  onChange={e => { setUserAnswer(e.target.value); setFeedback(null); }}
+                  onChange={e => {
+                    const val = e.target.value;
+                    setUserAnswer(val);
+                    setFeedback(null);
+                    if (val.trim() === currentQ.answer) {
+                      handleSubmit(val.trim());
+                    }
+                  }}
                   className={`w-full bg-white/40 dark:bg-white/5 backdrop-blur-sm border-2 rounded-3xl px-8 py-4 text-center text-3xl md:text-5xl font-headline font-bold text-on-surface placeholder:text-surface-container-highest transition-all shadow-inner focus:outline-none ${feedback === 'correct' ? 'border-primary bg-primary/5 text-primary dark:text-inverse-primary' :
                     feedback === 'incorrect' ? 'border-error bg-error/5 text-error' :
                       'border-outline-variant/50 dark:border-white/10 focus:border-[#fb8c00] focus:bg-white focus:dark:bg-white/10'

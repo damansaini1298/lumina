@@ -60,15 +60,15 @@ export default function LandingHero({ onGetStarted }: Props) {
         />
       </div>
 
-      {/* Floating word pills */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* Floating word pills — hidden on small screens to prevent horizontal overflow */}
+      <div className="hidden sm:block absolute inset-0 pointer-events-none overflow-hidden">
         {WORD_PILLS.map((pill, i) => (
           <div
             key={pill.word}
             className="absolute animate-bounce"
             style={{
               top: `${10 + (i * 14) % 80}%`,
-              left: i % 2 === 0 ? `${3 + (i * 7) % 12}%` : `${80 + (i * 3) % 15}%`,
+              left: i % 2 === 0 ? `${3 + (i * 7) % 12}%` : `${75 + (i * 3) % 12}%`,
               animationDelay: `${i * 0.7}s`,
               animationDuration: `${3 + i * 0.5}s`,
             }}
@@ -82,14 +82,14 @@ export default function LandingHero({ onGetStarted }: Props) {
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 min-h-full flex items-center justify-center py-20 px-6">
+      <div className="relative z-10 min-h-full flex items-center justify-center py-10 sm:py-20 px-4 sm:px-6">
         <div className="w-full max-w-2xl mx-auto text-center animate-in fade-in zoom-in-95 duration-700">
 
           {/* Logo mark */}
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-gradient-to-br from-[#630ed4] to-[#7c3aed] shadow-2xl shadow-purple-900/50 mb-10 relative">
-            <div className="absolute inset-0 rounded-3xl bg-white/10 backdrop-blur-sm" />
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-24 sm:h-24 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#630ed4] to-[#7c3aed] shadow-2xl shadow-purple-900/50 mb-6 sm:mb-10 relative">
+            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl bg-white/10 backdrop-blur-sm" />
             <span
-              className="material-symbols-outlined text-white text-5xl relative z-10"
+              className="material-symbols-outlined text-white text-3xl sm:text-5xl relative z-10"
               style={{ fontVariationSettings: "'FILL' 1" }}
             >
               language
@@ -97,13 +97,13 @@ export default function LandingHero({ onGetStarted }: Props) {
           </div>
 
           {/* Label */}
-          <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-6">
+          <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-3.5 py-1 sm:px-4 sm:py-1.5 mb-4 sm:mb-6">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-bold text-white/60 uppercase tracking-widest">Lumina · Language Platform</span>
+            <span className="text-[11px] sm:text-xs font-bold text-white/60 uppercase tracking-widest">Lumina · Language Platform</span>
           </div>
 
           {/* Headline */}
-          <h1 className="font-headline font-black tracking-tight leading-none mb-6" style={{ fontSize: 'clamp(3rem, 8vw, 5.5rem)' }}>
+          <h1 className="font-headline font-black tracking-tight leading-none mb-4 sm:mb-6" style={{ fontSize: 'clamp(2.25rem, 7vw, 5.5rem)' }}>
             <span className="text-white">Learn Languages</span>
             <br />
             <span className="bg-gradient-to-r from-[#a855f7] via-[#7c3aed] to-[#6366f1] bg-clip-text text-transparent">
@@ -111,20 +111,20 @@ export default function LandingHero({ onGetStarted }: Props) {
             </span>
           </h1>
 
-          <p className="text-white/50 text-lg md:text-xl max-w-md mx-auto mb-14 leading-relaxed font-medium">
+          <p className="text-white/50 text-base sm:text-xl max-w-md mx-auto mb-8 sm:mb-14 leading-relaxed font-medium">
             A distraction-free platform for daily language practice, powered by spaced‑repetition science and native audio.
           </p>
 
           {/* Feature cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-14">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 mb-8 sm:mb-14">
             {FEATURES.map(f => (
               <div
                 key={f.label}
-                className="relative bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4 text-left flex flex-col gap-3 overflow-hidden group hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300"
+                className="relative bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-3 sm:p-4 text-left flex flex-col gap-2.5 sm:gap-3 overflow-hidden group hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300"
               >
-                <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center shadow-lg`}>
+                <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center shadow-lg flex-shrink-0`}>
                   <span
-                    className="material-symbols-outlined text-white text-[18px]"
+                    className="material-symbols-outlined text-white text-[16px] sm:text-[18px]"
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     {f.icon}
@@ -139,16 +139,16 @@ export default function LandingHero({ onGetStarted }: Props) {
           </div>
 
           {/* CTA */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 sm:gap-4">
             <button
               onClick={onGetStarted}
-              className="group relative inline-flex items-center gap-3 px-12 py-5 rounded-full font-label font-bold text-lg text-white transition-all duration-300 hover:scale-105 active:scale-[0.98] overflow-hidden"
+              className="group relative inline-flex items-center gap-2.5 sm:gap-3 px-8 py-4 sm:px-12 sm:py-5 rounded-full font-label font-bold text-base sm:text-lg text-white transition-all duration-300 hover:scale-105 active:scale-[0.98] overflow-hidden"
               style={{ background: 'linear-gradient(135deg, #630ed4, #7c3aed, #6366f1)' }}
             >
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <span className="relative z-10">Get Started</span>
               <span
-                className="material-symbols-outlined text-xl relative z-10 transition-transform duration-300 group-hover:translate-x-1"
+                className="material-symbols-outlined text-lg sm:text-xl relative z-10 transition-transform duration-300 group-hover:translate-x-1"
                 style={{ fontVariationSettings: "'FILL' 1" }}
               >
                 arrow_forward

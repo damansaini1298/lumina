@@ -13,8 +13,8 @@ export default function Language() {
   const [QUESTIONS, setQuestions] = useState<any[]>([]);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [score, setScore]     = useState(0);
-  const [streak, setStreak]   = useState(0);
+  const [score, setScore] = useState(0);
+  const [streak, setStreak] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioProgress, setAudioProgress] = useState(0);
 
@@ -64,7 +64,7 @@ export default function Language() {
 
   return (
     <div className="relative min-h-[calc(100vh-64px)] w-full overflow-hidden bg-background font-body text-on-surface animate-in fade-in duration-700 pt-16">
-      
+
       <TutorialOverlay
         pageId="language"
         title="Vocabulary Vault"
@@ -88,7 +88,7 @@ export default function Language() {
             <span>{Math.round(progress * 100)}%</span>
           </div>
           <div className="h-2 w-full bg-surface-container-high/50 rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-[#10B981] to-[#34d399] rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
               style={{ width: `${progress * 100}%` }}
             ></div>
@@ -151,7 +151,7 @@ export default function Language() {
               </div>
               <div className="flex flex-col items-center w-full mt-4">
                 <h2 className="font-headline font-bold text-white leading-tight mb-4 drop-shadow-lg"
-                    style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', letterSpacing: '-0.02em' }}>
+                  style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', letterSpacing: '-0.02em' }}>
                   {currentQ?.term}
                 </h2>
                 {currentQ?.romanization && (

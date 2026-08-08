@@ -49,8 +49,12 @@ export default function Dictation() {
 
   const allPhrases = dynamicPhrases;
 
-  // SRS queue built once per language change — rebuild when lang changes
-  const [queue, setQueue] = useState<SRSPhrase[]>(() => buildSessionQueue(learningLang, allPhrases));
+  // Configurable session batch size (default 20)
+  const [batchSize, setBatchSize] = useState<number>(() => Number(localStorage.getItem('dictationBatchSize')) || 20);
+
+  // SRS queue built once per language/batch size change
+  const effectiveLimit = batchSize === 0 ? (allPhrases.length || 9999) : batchSize;
+  const [queue, setQueue] = useState<SRSPhrase[]>(() => buildSessionQueue(learningLang, allPhrases, effectiveLimit));
   const [queueIdx, setQueueIdx] = useState(0);
 
   const [userAnswer, setUserAnswer] = useState('');
@@ -63,15 +67,16 @@ export default function Dictation() {
   const [deckStats, setDeckStats] = useState(() => getDeckStats(learningLang, allPhrases));
   const [showStats, setShowStats] = useState(false);
 
-  // Rebuild queue when language changes
+  // Rebuild queue when language or batch size changes
   useEffect(() => {
-    const newQueue = buildSessionQueue(learningLang, allPhrases);
+    const limit = batchSize === 0 ? (allPhrases.length || 9999) : batchSize;
+    const newQueue = buildSessionQueue(learningLang, allPhrases, limit);
     setQueue(newQueue);
     setQueueIdx(0);
     setUserAnswer('');
     setFeedback(null);
     setDeckStats(getDeckStats(learningLang, allPhrases));
-  }, [learningLang, allPhrases]);
+  }, [learningLang, allPhrases, batchSize]);
 
   // Current phrase
   const currentQ = queue.length > 0 ? queue[queueIdx % queue.length] : { term: '', translation: '' };
@@ -96,7 +101,7 @@ export default function Dictation() {
 
   const handleInputFocus = useCallback(() => {
     playAudio();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQ.term, learningLang]);
 
   const playAudio = useCallback(() => {
@@ -124,7 +129,7 @@ export default function Dictation() {
   const handleCheck = (e: React.FormEvent) => {
     e.preventDefault();
     if (!userAnswer.trim() && !isRevealed) return;
-    
+
     if (isRevealed) {
       // User gave up or is skipping after reveal
       recordAnswer(learningLang, currentQ.term, currentQ.translation, 1);
@@ -228,8 +233,8 @@ export default function Dictation() {
             ></div>
           </div>
         </div>
-        <div className="flex items-center gap-4 text-on-surface-variant font-label font-medium glass-panel px-6 py-4 rounded-3xl">
-          <span className="text-sm border-r border-outline-variant/30 pr-4">{t('Session')}: {sessionCount} {t('correct')}</span>
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-on-surface-variant font-label font-medium glass-panel px-4 sm:px-6 py-3 sm:py-4 rounded-3xl">
+          <span className="text-sm border-r border-outline-variant/30 pr-3 sm:pr-4">{t('Session')}: {sessionCount} {t('correct')}</span>
           {/* SRS Stats Toggle */}
           <button
             onClick={() => setShowStats(v => !v)}
@@ -238,8 +243,27 @@ export default function Dictation() {
             <span className="material-symbols-outlined text-sm">psychology</span>
             <span>{deckStats.due} due · {deckStats.mastered} mastered</span>
           </button>
-          <div className="flex items-center gap-2">
-            <span>{t('Card')} {queueIdx % queue.length + 1} / {queue.length}</span>
+          
+          {/* Batch Size Selector */}
+          <div className="flex items-center gap-1 text-xs font-bold bg-surface-container-high/40 dark:bg-white/5 px-2.5 py-1 rounded-full border border-white/20">
+            <span className="text-on-surface-variant text-[10px] uppercase tracking-wider pr-1">{t('Batch')}:</span>
+            {[20, 50, 100, 0].map(size => (
+              <button
+                key={size}
+                type="button"
+                onClick={() => {
+                  setBatchSize(size);
+                  localStorage.setItem('dictationBatchSize', String(size));
+                }}
+                className={`px-2 py-0.5 text-[11px] rounded-md transition-all ${batchSize === size ? 'bg-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}
+              >
+                {size === 0 ? t('All') : size}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2 border-l border-outline-variant/30 pl-3 sm:pl-4">
+            <span>{t('Card')} {queueIdx % (queue.length || 1) + 1} / {queue.length}</span>
             <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary dark:text-inverse-primary shadow-inner border border-primary/20">
               <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
             </div>
@@ -287,9 +311,8 @@ export default function Dictation() {
           <div className="flex flex-col items-center gap-6 mb-12 w-full">
             <button
               onClick={playAudio}
-              className={`w-28 h-28 rounded-full flex items-center justify-center transition-all duration-300 group shadow-xl ${
-                isPlaying ? 'bg-gradient-to-tr from-[#ff9800] to-[#fb8c00] text-white scale-105 shadow-orange-500/30' : 'glass-panel text-[#ff9800] hover:scale-105 border border-white/30 hover:bg-white/90'
-              }`}
+              className={`w-28 h-28 rounded-full flex items-center justify-center transition-all duration-300 group shadow-xl ${isPlaying ? 'bg-gradient-to-tr from-[#ff9800] to-[#fb8c00] text-white scale-105 shadow-orange-500/30' : 'glass-panel text-[#ff9800] hover:scale-105 border border-white/30 hover:bg-white/90'
+                }`}
             >
               <span className="material-symbols-outlined text-5xl drop-shadow-sm" style={{ fontVariationSettings: "'FILL' 1" }}>
                 {isPlaying ? 'graphic_eq' : 'play_arrow'}
@@ -323,12 +346,11 @@ export default function Dictation() {
                   value={userAnswer}
                   onFocus={handleInputFocus}
                   onChange={(e) => setUserAnswer(e.target.value)}
-                  className={`w-full bg-white/40 dark:bg-white/5 backdrop-blur-sm border-2 rounded-3xl px-8 py-4 text-center text-2xl md:text-4xl font-headline font-bold text-on-surface placeholder:text-surface-container-highest transition-all shadow-inner focus:outline-none ${
-                    feedback === 'correct' ? 'border-primary bg-primary/5 text-primary dark:text-inverse-primary' :
-                    feedback === 'incorrect' ? 'border-error bg-error/5 text-error' :
-                    feedback === 'missing_accents' ? 'border-amber-500 bg-amber-500/5 text-amber-600' :
-                    'border-outline-variant/50 dark:border-white/10 focus:border-primary focus:bg-white focus:dark:bg-white/10'
-                  }`}
+                  className={`w-full bg-white/40 dark:bg-white/5 backdrop-blur-sm border-2 rounded-3xl px-8 py-4 text-center text-2xl md:text-4xl font-headline font-bold text-on-surface placeholder:text-surface-container-highest transition-all shadow-inner focus:outline-none ${feedback === 'correct' ? 'border-primary bg-primary/5 text-primary dark:text-inverse-primary' :
+                      feedback === 'incorrect' ? 'border-error bg-error/5 text-error' :
+                        feedback === 'missing_accents' ? 'border-amber-500 bg-amber-500/5 text-amber-600' :
+                          'border-outline-variant/50 dark:border-white/10 focus:border-primary focus:bg-white focus:dark:bg-white/10'
+                    }`}
                   placeholder={isNonLatin ? t('Type English or romanization...') : t('Type what you hear...')}
                   readOnly={feedback === 'correct'}
                 />
